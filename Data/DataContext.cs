@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using minhaApiWeb.Models;
 
-using minhaApiWeb.Data
+namespace minhaApiWeb.Data
 {
     public class DataContext : DbContext
     {

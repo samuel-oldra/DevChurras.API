@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using minhaApiWeb.Data;
 using minhaApiWeb.Models;
@@ -22,7 +23,7 @@ namespace minhaApiWeb.Controllers
         [Route("")]
         public async Task<ActionResult<Participante>> Post(
             [FromServices] DataContext context,
-            [fromBody] Participante model)
+            [FromBody] Participante model)
         {
             if (ModelState.IsValid)
             {
