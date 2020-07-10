@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace minhaApiWeb.Models {
-    public class Participante {
+    public class Convidado {
         [Key]
         public int Id { get; set; }
 

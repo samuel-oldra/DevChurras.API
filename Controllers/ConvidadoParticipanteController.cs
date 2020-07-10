@@ -7,20 +7,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace minhaApiWeb.Controllers {
     [ApiController]
-    [Route ("participantes")]
-    public class ParticipanteController : ControllerBase {
+    [Route ("convidados")]
+    public class ConvidadoController : ControllerBase {
         [HttpGet]
         [Route ("")]
-        public async Task<ActionResult<List<Participante>>> Get ([FromServices] DataContext context) {
-            var participantes = await context.Participantes.ToListAsync ();
-            return participantes;
+        public async Task<ActionResult<List<Convidado>>> Get ([FromServices] DataContext context) {
+            var convidados = await context.Convidados.ToListAsync ();
+            return convidados;
         }
 
         [HttpPost]
         [Route ("")]
-        public async Task<ActionResult<Participante>> Post ([FromServices] DataContext context, [FromBody] Participante model) {
+        public async Task<ActionResult<Convidado>> Post ([FromServices] DataContext context, [FromBody] Convidado model) {
             if (ModelState.IsValid) {
-                context.Participantes.Add (model);
+                context.Convidados.Add (model);
                 await context.SaveChangesAsync ();
                 return model;
             } else {
