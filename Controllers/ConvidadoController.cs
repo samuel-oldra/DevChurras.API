@@ -12,7 +12,7 @@ namespace minhaApiWeb.Controllers {
         [HttpGet]
         [Route ("")]
         public async Task<ActionResult<List<Convidado>>> Get ([FromServices] DataContext context) {
-            var convidados = await context.Convidados.ToListAsync ();
+            var convidados = await context.Convidados.Include (x => x.Participante).ToListAsync ();
             return convidados;
         }
 
