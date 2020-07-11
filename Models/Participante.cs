@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace minhaApiWeb.Models {
     public class Participante {
         [Key]
-        public int Id { get; set; }
+        public int ParticipanteId { get; set; }
 
         [Required (ErrorMessage = "Esse campo é obrigatório")]
         [MaxLength (60, ErrorMessage = "Esse campo deve conter entre 3 e 60 caracteres")]
