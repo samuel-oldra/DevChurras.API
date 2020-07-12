@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace minhaApiWeb.Controllers {
     [ApiController]
-    [Route ("convidados")]
+    [Route ("")]
     public class ConvidadoController : ControllerBase {
         [HttpGet]
-        [Route ("")]
+        [Route ("listar_convidados")]
         public async Task<ActionResult<List<Convidado>>> Get ([FromServices] DataContext context) {
             var convidados = await context.Convidados
                 .Include (p => p.Participante)
@@ -19,7 +19,7 @@ namespace minhaApiWeb.Controllers {
         }
 
         [HttpPost]
-        [Route ("")]
+        [Route ("adicionar_convidado")]
         public async Task<ActionResult<Convidado>> Post ([FromServices] DataContext context, [FromBody] Convidado model) {
             // Participante não encontrado
             var hasParticipante = await context.Participantes
@@ -42,6 +42,20 @@ namespace minhaApiWeb.Controllers {
             } else {
                 return BadRequest (ModelState);
             }
+        }
+
+        [HttpGet]
+        [Route ("remover_convidado/{id:int}")]
+        public async Task<ActionResult<Convidado>> Get ([FromServices] DataContext context, int id) {
+            var convidado = await context.Convidados
+                .AsNoTracking ()
+                .FirstOrDefaultAsync (c => c.ConvidadoId == id);
+            if (convidado == null)
+                return BadRequest ("Convidado não encontrado");
+            context.Convidados.Remove (convidado);
+
+            await context.SaveChangesAsync ();
+            return convidado;
         }
     }
 }
