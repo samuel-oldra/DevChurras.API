@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace minhaApiWeb.Controllers {
     [ApiController]
-    [Route ("participantes")]
+    [Route ("")]
     public class ParticipanteController : ControllerBase {
         [HttpGet]
-        [Route ("")]
+        [Route ("listar_participantes")]
         public async Task<ActionResult<List<Participante>>> Get ([FromServices] DataContext context) {
             var participantes = await context.Participantes.ToListAsync ();
             return participantes;
         }
 
         [HttpPost]
-        [Route ("")]
+        [Route ("adicionar_participante")]
         public async Task<ActionResult<Participante>> Post ([FromServices] DataContext context, [FromBody] Participante model) {
             if (ModelState.IsValid) {
                 context.Participantes.Add (model);
@@ -26,6 +26,28 @@ namespace minhaApiWeb.Controllers {
             } else {
                 return BadRequest (ModelState);
             }
+        }
+
+        [HttpGet]
+        [Route ("remover_participante/{id:int}")]
+        public async Task<ActionResult<Participante>> Get ([FromServices] DataContext context, int id) {
+            // Remove participante
+            var participante = await context.Participantes
+                .AsNoTracking ()
+                .FirstOrDefaultAsync (p => p.ParticipanteId == id);
+            if (participante == null)
+                return BadRequest ("Participante não encontrado");
+            context.Participantes.Remove (participante);
+
+            // Remove convidado do participante
+            var convidado = await context.Convidados
+                .AsNoTracking ()
+                .FirstOrDefaultAsync (c => c.ParticipanteId == id);
+            if (convidado != null)
+                context.Convidados.Remove (convidado);
+
+            await context.SaveChangesAsync ();
+            return participante;
         }
     }
 }
