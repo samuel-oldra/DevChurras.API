@@ -19,7 +19,19 @@ namespace minhaApiWeb.Controllers {
                 var participantes = await context.Participantes.ToListAsync ();
                 var convidados = await context.Convidados.ToListAsync ();
 
-                model.TotalArrecadado = (participantes.Count + convidados.Count) * valorPorPessoa;
+                foreach (var participante in participantes) {
+                    if (participante.ConsomeBebidaAlcoolica)
+                        model.TotalArrecadado += valorPorPessoa;
+                    else
+                        model.TotalArrecadado += valorPorPessoaQueNaoBebe;
+                }
+
+                foreach (var convidado in convidados) {
+                    if (convidado.ConsomeBebidaAlcoolica)
+                        model.TotalArrecadado += valorPorPessoa;
+                    else
+                        model.TotalArrecadado += valorPorPessoaQueNaoBebe;
+                }
 
                 return model;
             } else {
