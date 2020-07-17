@@ -1,32 +1,37 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using minhaApiWeb.Data;
-using minhaApiWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using minhaApiWeb.Data;
+using minhaApiWeb.Models;
+using System.Threading.Tasks;
 
-namespace minhaApiWeb.Controllers {
+namespace minhaApiWeb.Controllers
+{
     [ApiController]
-    [Route ("")]
-    public class TotalController : ControllerBase {
+    [Route("")]
+    public class TotalController : ControllerBase
+    {
         [HttpPost]
-        [Route ("totais")]
-        public async Task<ActionResult<Total>> Post ([FromServices] DataContext context, [FromBody] Total model) {
+        [Route("totais")]
+        public async Task<ActionResult<Total>> Post([FromServices] DataContext context, [FromBody] Total model)
+        {
             int valorPorPessoa = 20;
             int valorPorPessoaQueNaoBebe = 10;
 
-            if (ModelState.IsValid) {
-                var participantes = await context.Participantes.ToListAsync ();
-                var convidados = await context.Convidados.ToListAsync ();
+            if (ModelState.IsValid)
+            {
+                var participantes = await context.Participantes.ToListAsync();
+                var convidados = await context.Convidados.ToListAsync();
 
-                foreach (var participante in participantes) {
+                foreach (var participante in participantes)
+                {
                     if (participante.ConsomeBebidaAlcoolica)
                         model.TotalArrecadado += valorPorPessoa;
                     else
                         model.TotalArrecadado += valorPorPessoaQueNaoBebe;
                 }
 
-                foreach (var convidado in convidados) {
+                foreach (var convidado in convidados)
+                {
                     if (convidado.ConsomeBebidaAlcoolica)
                         model.TotalArrecadado += valorPorPessoa;
                     else
@@ -34,8 +39,10 @@ namespace minhaApiWeb.Controllers {
                 }
 
                 return model;
-            } else {
-                return BadRequest (ModelState);
+            }
+            else
+            {
+                return BadRequest(ModelState);
             }
         }
     }
