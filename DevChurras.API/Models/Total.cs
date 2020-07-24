@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace minhaApiWeb.Models
+namespace DevChurras.API.Models
 {
     public class Total
     {

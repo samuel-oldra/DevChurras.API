@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using minhaApiWeb.Data;
-using minhaApiWeb.Models;
+using DevChurras.API.Data;
+using DevChurras.API.Models;
 using System.Threading.Tasks;
 
-namespace minhaApiWeb.Controllers
+namespace DevChurras.API.Controllers
 {
     [ApiController]
     [Route("")]

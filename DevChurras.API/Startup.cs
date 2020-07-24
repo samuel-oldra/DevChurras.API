@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using minhaApiWeb.Data;
+using DevChurras.API.Data;
 
-namespace minhaApiWeb
+namespace DevChurras.API
 {
     public class Startup
     {

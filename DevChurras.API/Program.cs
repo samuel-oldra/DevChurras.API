@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace minhaApiWeb
+namespace DevChurras.API
 {
     public class Program
     {
