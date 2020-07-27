@@ -10,7 +10,7 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 ## Funcionalidades
 - Adição, Remoção e Listagem de Participantes
 - Adição, Remoção e Listagem de Convidados
-- Listagem de Totais do evento
+- Cálculo dos Totais do Evento
 
 # Adicionar Participante
 ![alt text](https://raw.githubusercontent.com/samuel-oldra/DevChurras.API/main/README_IMGS/adicionar_participante.png)
