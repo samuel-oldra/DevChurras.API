@@ -21,8 +21,8 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 
 ## Comandos básicos
 ```
+dotnet new gitignore
 dotnet new webapi -o DevChurras.API
 dotnet build
 dotnet run
-dotnet watch run
 ```
