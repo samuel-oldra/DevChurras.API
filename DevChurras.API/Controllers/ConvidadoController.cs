@@ -15,6 +15,7 @@ namespace DevChurras.API.Controllers
         /// <summary>
         /// Listagem de Convidados
         /// </summary>
+        /// <param name="context">DataContext</param>
         /// <returns>Lista de Convidados</returns>
         /// <response code="200">Sucesso</response>
         [HttpGet]
@@ -38,6 +39,7 @@ namespace DevChurras.API.Controllers
         ///     "participanteId": 1
         /// }
         /// </remarks>
+        /// <param name="context">DataContext</param>
         /// <param name="model">Dados do Convidado</param>
         /// <returns>Objeto criado</returns>
         /// <response code="200">Sucesso</response>
@@ -47,20 +49,22 @@ namespace DevChurras.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Post(
-            [FromServices] DataContext context,
-            [FromBody] Convidado model)
+        public async Task<IActionResult> Post([FromServices] DataContext context, [FromBody] Convidado model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             // Participante não encontrado
             var hasParticipante = await context.Participantes.AnyAsync(p => p.Id == model.ParticipanteId);
-            if (!hasParticipante) return NotFound("Participante não encontrado");
+
+            if (!hasParticipante)
+                return NotFound("Participante não encontrado");
 
             // Participante já possui um convidado
             var hasConvidado = await context.Convidados.AnyAsync(c => c.ParticipanteId == model.ParticipanteId);
-            if (hasConvidado) return BadRequest("Participante já possui um convidado");
+
+            if (hasConvidado)
+                return BadRequest("Participante já possui um convidado");
 
             context.Convidados.Add(model);
             await context.SaveChangesAsync();
@@ -72,6 +76,7 @@ namespace DevChurras.API.Controllers
         /// <summary>
         /// Deleta um Convidado
         /// </summary>
+        /// <param name="context">DataContext</param>
         /// <param name="id">ID do Convidado</param>
         /// <response code="204">Sucesso</response>
         /// <response code="404">Convidado não encontrado</response>
@@ -81,7 +86,9 @@ namespace DevChurras.API.Controllers
         public async Task<IActionResult> Delete([FromServices] DataContext context, int id)
         {
             var convidado = await context.Convidados.SingleOrDefaultAsync(c => c.Id == id);
-            if (convidado == null) return NotFound("Convidado não encontrado");
+
+            if (convidado == null)
+                return NotFound("Convidado não encontrado");
 
             context.Convidados.Remove(convidado);
             await context.SaveChangesAsync();
