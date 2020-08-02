@@ -57,7 +57,6 @@ namespace DevChurras.API.Controllers
             return Ok(model);
         }
 
-
         // DELETE: api/participante/{id}
         /// <summary>
         /// Deleta um Participante
