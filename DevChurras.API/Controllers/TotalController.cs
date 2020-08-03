@@ -1,8 +1,7 @@
-using DevChurras.API.Data;
 using DevChurras.API.Models;
+using DevChurras.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace DevChurras.API.Controllers
@@ -11,6 +10,18 @@ namespace DevChurras.API.Controllers
     [Route("api/total")]
     public class TotalController : ControllerBase
     {
+        private readonly IConvidadoRepository convidadoRepository;
+
+        private readonly IParticipanteRepository participanteRepository;
+
+        public TotalController(
+            IConvidadoRepository convidadoRepository,
+            IParticipanteRepository participanteRepository)
+        {
+            this.convidadoRepository = convidadoRepository;
+            this.participanteRepository = participanteRepository;
+        }
+
         // POST: api/total
         /// <summary>
         /// Cálculo dos Totais
@@ -22,7 +33,6 @@ namespace DevChurras.API.Controllers
         ///     "valorGastoBebida": 60
         /// }
         /// </remarks>
-        /// <param name="context">DataContext</param>
         /// <param name="model">Dados dos Valores</param>
         /// <returns>Objeto criado</returns>
         /// <response code="200">Sucesso</response>
@@ -30,9 +40,7 @@ namespace DevChurras.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post(
-            [FromServices] DataContext context,
-            [FromBody] Total model)
+        public async Task<IActionResult> Post(Total model)
         {
             var valorPorPessoa = 40;
             var valorPorPessoaQueNaoBebe = 30;
@@ -40,7 +48,7 @@ namespace DevChurras.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var participantes = await context.Participantes.ToListAsync();
+            var participantes = await participanteRepository.GetAllAsync();
 
             foreach (var participante in participantes)
             {
@@ -50,7 +58,7 @@ namespace DevChurras.API.Controllers
                     model.IncrementaValorArrecadado(valorPorPessoaQueNaoBebe);
             }
 
-            var convidados = await context.Convidados.ToListAsync();
+            var convidados = await convidadoRepository.GetAllAsync();
 
             foreach (var convidado in convidados)
             {
