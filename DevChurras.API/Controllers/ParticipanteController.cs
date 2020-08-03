@@ -1,8 +1,7 @@
-using DevChurras.API.Data;
 using DevChurras.API.Models;
+using DevChurras.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace DevChurras.API.Controllers
@@ -11,18 +10,29 @@ namespace DevChurras.API.Controllers
     [Route("api/participante")]
     public class ParticipanteController : ControllerBase
     {
+        private readonly IConvidadoRepository convidadoRepository;
+
+        private readonly IParticipanteRepository participanteRepository;
+
+        public ParticipanteController(
+            IConvidadoRepository convidadoRepository,
+            IParticipanteRepository participanteRepository)
+        {
+            this.convidadoRepository = convidadoRepository;
+            this.participanteRepository = participanteRepository;
+        }
+
         // GET: api/participante
         /// <summary>
         /// Listagem de Participantes
         /// </summary>
-        /// <param name="context">DataContext</param>
         /// <returns>Lista de Participantes</returns>
         /// <response code="200">Sucesso</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll([FromServices] DataContext context)
+        public async Task<IActionResult> GetAll()
         {
-            var participantes = await context.Participantes.ToListAsync();
+            var participantes = await participanteRepository.GetAllAsync();
 
             return Ok(participantes);
         }
@@ -38,7 +48,6 @@ namespace DevChurras.API.Controllers
         ///     "consomeBebidaAlcoolica": true
         /// }
         /// </remarks>
-        /// <param name="context">DataContext</param>
         /// <param name="model">Dados do Participante</param>
         /// <returns>Objeto criado</returns>
         /// <response code="200">Sucesso</response>
@@ -46,13 +55,12 @@ namespace DevChurras.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post([FromServices] DataContext context, [FromBody] Participante model)
+        public async Task<IActionResult> Post(Participante model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            context.Participantes.Add(model);
-            await context.SaveChangesAsync();
+            await participanteRepository.AddAsync(model);
 
             return Ok(model);
         }
@@ -61,30 +69,27 @@ namespace DevChurras.API.Controllers
         /// <summary>
         /// Deleta um Participante
         /// </summary>
-        /// <param name="context">DataContext</param>
         /// <param name="id">ID do Participante</param>
         /// <response code="204">Sucesso</response>
         /// <response code="404">Participante não encontrado</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete([FromServices] DataContext context, int id)
+        public async Task<IActionResult> Delete(int id)
         {
             // Remove participante
-            var participante = await context.Participantes.SingleOrDefaultAsync(p => p.Id == id);
+            var participante = await participanteRepository.GetByIdAsync(id);
 
             if (participante == null)
                 return NotFound("Participante não encontrado");
 
-            context.Participantes.Remove(participante);
+            await participanteRepository.DeleteAsync(participante);
 
             // Remove convidado do participante
-            var convidado = await context.Convidados.SingleOrDefaultAsync(c => c.ParticipanteId == id);
+            var convidado = await convidadoRepository.GetByParticipanteIdAsync(id);
 
             if (convidado != null)
-                context.Convidados.Remove(convidado);
-
-            await context.SaveChangesAsync();
+                await convidadoRepository.DeleteAsync(convidado);
 
             return NoContent();
         }

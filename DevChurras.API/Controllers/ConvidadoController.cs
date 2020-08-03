@@ -1,8 +1,7 @@
-using DevChurras.API.Data;
 using DevChurras.API.Models;
+using DevChurras.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace DevChurras.API.Controllers
@@ -11,18 +10,29 @@ namespace DevChurras.API.Controllers
     [Route("api/convidado")]
     public class ConvidadoController : ControllerBase
     {
+        private readonly IConvidadoRepository convidadoRepository;
+
+        private readonly IParticipanteRepository participanteRepository;
+
+        public ConvidadoController(
+            IConvidadoRepository convidadoRepository,
+            IParticipanteRepository participanteRepository)
+        {
+            this.convidadoRepository = convidadoRepository;
+            this.participanteRepository = participanteRepository;
+        }
+
         // GET: api/convidado
         /// <summary>
         /// Listagem de Convidados
         /// </summary>
-        /// <param name="context">DataContext</param>
         /// <returns>Lista de Convidados</returns>
         /// <response code="200">Sucesso</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll([FromServices] DataContext context)
+        public async Task<IActionResult> GetAll()
         {
-            var convidados = await context.Convidados.Include(c => c.Participante).ToListAsync();
+            var convidados = await convidadoRepository.GetAllAsync();
 
             return Ok(convidados);
         }
@@ -39,7 +49,6 @@ namespace DevChurras.API.Controllers
         ///     "participanteId": 1
         /// }
         /// </remarks>
-        /// <param name="context">DataContext</param>
         /// <param name="model">Dados do Convidado</param>
         /// <returns>Objeto criado</returns>
         /// <response code="200">Sucesso</response>
@@ -49,25 +58,24 @@ namespace DevChurras.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Post([FromServices] DataContext context, [FromBody] Convidado model)
+        public async Task<IActionResult> Post(Convidado model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             // Participante não encontrado
-            var hasParticipante = await context.Participantes.AnyAsync(p => p.Id == model.ParticipanteId);
+            var hasParticipante = await participanteRepository.ParticipanteExistsAsync(model.ParticipanteId);
 
             if (!hasParticipante)
                 return NotFound("Participante não encontrado");
 
             // Participante já possui um convidado
-            var hasConvidado = await context.Convidados.AnyAsync(c => c.ParticipanteId == model.ParticipanteId);
+            var hasConvidado = await convidadoRepository.ConvidadoByParticipanteIdExistsAsync(model.ParticipanteId);
 
             if (hasConvidado)
                 return BadRequest("Participante já possui um convidado");
 
-            context.Convidados.Add(model);
-            await context.SaveChangesAsync();
+            await convidadoRepository.AddAsync(model);
 
             return Ok(model);
         }
@@ -76,22 +84,20 @@ namespace DevChurras.API.Controllers
         /// <summary>
         /// Deleta um Convidado
         /// </summary>
-        /// <param name="context">DataContext</param>
         /// <param name="id">ID do Convidado</param>
         /// <response code="204">Sucesso</response>
         /// <response code="404">Convidado não encontrado</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete([FromServices] DataContext context, int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var convidado = await context.Convidados.SingleOrDefaultAsync(c => c.Id == id);
+            var convidado = await convidadoRepository.GetByIdAsync(id);
 
             if (convidado == null)
                 return NotFound("Convidado não encontrado");
 
-            context.Convidados.Remove(convidado);
-            await context.SaveChangesAsync();
+            await convidadoRepository.DeleteAsync(convidado);
 
             return NoContent();
         }
