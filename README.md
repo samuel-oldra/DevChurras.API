@@ -8,6 +8,8 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 - In-Memory database
 - Swagger
 - Injeção de Dependência
+- Programação Orientada a Objetos
+- Padrão Repository
 - Clean Code
 
 ## Funcionalidades
