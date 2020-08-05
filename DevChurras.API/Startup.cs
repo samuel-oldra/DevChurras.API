@@ -1,4 +1,5 @@
 using DevChurras.API.Data;
+using DevChurras.API.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,10 @@ namespace DevChurras.API
 
             // Injeção de Dependência
             // Tipos: Transient, Scoped, Singleton
+            // Padrão Repository
             services.AddScoped<DataContext, DataContext>();
+            services.AddScoped<IConvidadoRepository, ConvidadoRepository>();
+            services.AddScoped<IParticipanteRepository, ParticipanteRepository>();
 
             services.AddControllers();
 
