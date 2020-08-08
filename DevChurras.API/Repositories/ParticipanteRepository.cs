@@ -10,14 +10,14 @@ namespace DevChurras.API.Repositories
     {
         private readonly DataContext context;
 
-        public ParticipanteRepository(DataContext context) =>
-            this.context = context;
+        public ParticipanteRepository(DataContext context)
+            => this.context = context;
 
-        public async Task<List<Participante>> GetAllAsync() =>
-            await context.Participantes.ToListAsync();
+        public async Task<List<Participante>> GetAllAsync()
+            => await context.Participantes.ToListAsync();
 
-        public async Task<Participante> GetByIdAsync(int id) =>
-            await context.Participantes.SingleOrDefaultAsync(p => p.Id == id);
+        public async Task<Participante> GetByIdAsync(int id)
+            => await context.Participantes.SingleOrDefaultAsync(p => p.Id == id);
 
         public async Task AddAsync(Participante participante)
         {
@@ -33,7 +33,7 @@ namespace DevChurras.API.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> ParticipanteExistsAsync(int id) =>
-            await context.Participantes.AnyAsync(p => p.Id == id);
+        public async Task<bool> ParticipanteExistsAsync(int id)
+            => await context.Participantes.AnyAsync(p => p.Id == id);
     }
 }
