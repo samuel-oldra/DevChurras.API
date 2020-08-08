@@ -15,13 +15,13 @@ namespace DevChurras.API.Models
 
         public double ValorArrecadado { get; private set; }
 
-        public double TotalGasto =>
-            Math.Round(this.ValorGastoComida + this.ValorGastoBebida, 2);
+        public double TotalGasto
+            => Math.Round(this.ValorGastoComida + this.ValorGastoBebida, 2);
 
-        public double Saldo =>
-            Math.Round(this.ValorArrecadado - (this.ValorGastoComida + this.ValorGastoBebida), 2);
+        public double Saldo
+            => Math.Round(this.ValorArrecadado - (this.ValorGastoComida + this.ValorGastoBebida), 2);
 
-        public void IncrementaValorArrecadado(double valor) =>
-            this.ValorArrecadado += valor;
+        public void IncrementaValorArrecadado(double valor)
+            => this.ValorArrecadado += valor;
     }
 }

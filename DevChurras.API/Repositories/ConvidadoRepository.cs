@@ -10,17 +10,17 @@ namespace DevChurras.API.Repositories
     {
         private readonly DataContext context;
 
-        public ConvidadoRepository(DataContext context) =>
-            this.context = context;
+        public ConvidadoRepository(DataContext context)
+            => this.context = context;
 
-        public async Task<List<Convidado>> GetAllAsync() =>
-            await context.Convidados.Include(c => c.Participante).ToListAsync();
+        public async Task<List<Convidado>> GetAllAsync()
+            => await context.Convidados.Include(c => c.Participante).ToListAsync();
 
-        public async Task<Convidado> GetByIdAsync(int id) =>
-            await context.Convidados.SingleOrDefaultAsync(c => c.Id == id);
+        public async Task<Convidado> GetByIdAsync(int id)
+            => await context.Convidados.SingleOrDefaultAsync(c => c.Id == id);
 
-        public async Task<Convidado> GetByParticipanteIdAsync(int participanteId) =>
-            await context.Convidados.SingleOrDefaultAsync(c => c.ParticipanteId == participanteId);
+        public async Task<Convidado> GetByParticipanteIdAsync(int participanteId)
+            => await context.Convidados.SingleOrDefaultAsync(c => c.ParticipanteId == participanteId);
 
         public async Task AddAsync(Convidado convidado)
         {
@@ -36,7 +36,7 @@ namespace DevChurras.API.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> ConvidadoByParticipanteIdExistsAsync(int participanteId) =>
-            await context.Convidados.AnyAsync(c => c.ParticipanteId == participanteId);
+        public async Task<bool> ConvidadoByParticipanteIdExistsAsync(int participanteId)
+            => await context.Convidados.AnyAsync(c => c.ParticipanteId == participanteId);
     }
 }
