@@ -27,4 +27,6 @@ dotnet new gitignore
 dotnet new webapi -o DevChurras.API
 dotnet build
 dotnet run
+dotnet watch run
+dotnet publish
 ```

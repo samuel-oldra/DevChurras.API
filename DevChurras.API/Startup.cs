@@ -73,6 +73,7 @@ namespace DevChurras.API
                 endpoints.MapControllers();
             });
 
+            // INFO: Swagger visível só em desenvolvimento
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
