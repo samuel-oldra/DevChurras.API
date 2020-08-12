@@ -1,4 +1,11 @@
-# Projeto de API usando C# e .NET Core 3.1
+<h1 align="center">
+  DevChurras.API
+</h1>
+<p align="center">
+  <a href="#tecnologias-e-práticas-utilizadas">Tecnologias e práticas utilizadas</a> •
+  <a href="#funcionalidades">Funcionalidades</a> •
+  <a href="#comandos">Comandos</a>
+</p>
 
 Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 
@@ -21,7 +28,9 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 
 ![alt text](https://raw.githubusercontent.com/samuel-oldra/DevChurras.API/main/README_IMGS/swagger_ui.png)
 
-## Comandos básicos
+## Comandos
+
+### Comandos básicos
 ```
 dotnet new gitignore
 dotnet new webapi -o DevChurras.API
