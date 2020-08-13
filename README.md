@@ -18,6 +18,7 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 - Programação Orientada a Objetos
 - Padrão Repository
 - Clean Code
+- Publicação
 
 ## Funcionalidades
 - Adição, Remoção e Listagem de Participantes
