@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using minhaApiWeb.Models;
+using DevChurras.API.Models;
 
-namespace minhaApiWeb.Data
+namespace DevChurras.API.Data
 {
     public class DataContext : DbContext
     {

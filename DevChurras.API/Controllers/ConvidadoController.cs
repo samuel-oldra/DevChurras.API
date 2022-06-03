@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using minhaApiWeb.Data;
-using minhaApiWeb.Models;
+using DevChurras.API.Data;
+using DevChurras.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace minhaApiWeb.Controllers
+namespace DevChurras.API.Controllers
 {
     [ApiController]
     [Route("")]
