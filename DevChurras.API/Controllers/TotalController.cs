@@ -7,17 +7,14 @@ using System.Threading.Tasks;
 namespace DevChurras.API.Controllers
 {
     [ApiController]
-    [Route("")]
+    [Route("api/total")]
     public class TotalController : ControllerBase
     {
         [HttpPost]
-        [Route("totais")]
-        public async Task<ActionResult<Total>> Post(
-            [FromServices] DataContext context,
-            [FromBody] Total model)
+        public async Task<IActionResult> Post([FromServices] DataContext context, [FromBody] Total model)
         {
-            int valorPorPessoa = 20;
-            int valorPorPessoaQueNaoBebe = 10;
+            var valorPorPessoa = 40;
+            var valorPorPessoaQueNaoBebe = 30;
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -27,9 +24,9 @@ namespace DevChurras.API.Controllers
             foreach (var participante in participantes)
             {
                 if (participante.ConsomeBebidaAlcoolica)
-                    model.TotalArrecadado += valorPorPessoa;
+                    model.IncrementaValorArrecadado(valorPorPessoa);
                 else
-                    model.TotalArrecadado += valorPorPessoaQueNaoBebe;
+                    model.IncrementaValorArrecadado(valorPorPessoaQueNaoBebe);
             }
 
             var convidados = await context.Convidados.ToListAsync();
@@ -37,9 +34,9 @@ namespace DevChurras.API.Controllers
             foreach (var convidado in convidados)
             {
                 if (convidado.ConsomeBebidaAlcoolica)
-                    model.TotalArrecadado += valorPorPessoa;
+                    model.IncrementaValorArrecadado(valorPorPessoa);
                 else
-                    model.TotalArrecadado += valorPorPessoaQueNaoBebe;
+                    model.IncrementaValorArrecadado(valorPorPessoaQueNaoBebe);
             }
 
             return Ok(model);
