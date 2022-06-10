@@ -6,6 +6,9 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 - ASP.NET Core com .NET Core 3.1
 - Entity Framework Core
 - In-Memory database
+- Swagger
+- Injeção de Dependência
+- Clean Code
 
 ## Funcionalidades
 - Adição, Remoção e Listagem de Participantes
