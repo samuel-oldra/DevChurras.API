@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace DevChurras.API
 {
@@ -36,6 +38,11 @@ namespace DevChurras.API
                         Url = new Uri("https://github.com/samuel-oldra")
                     }
                 });
+
+                // Incluindo comentários XML ao Swagger
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -63,7 +70,7 @@ namespace DevChurras.API
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = string.Empty;
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevChurras.API v1");
             });
         }
     }
