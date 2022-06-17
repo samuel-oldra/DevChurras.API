@@ -15,6 +15,7 @@ namespace DevChurras.API.Controllers
         /// <summary>
         /// Listagem de Participantes
         /// </summary>
+        /// <param name="context">DataContext</param>
         /// <returns>Lista de Participantes</returns>
         /// <response code="200">Sucesso</response>
         [HttpGet]
@@ -37,6 +38,7 @@ namespace DevChurras.API.Controllers
         ///     "consomeBebidaAlcoolica": true
         /// }
         /// </remarks>
+        /// <param name="context">DataContext</param>
         /// <param name="model">Dados do Participante</param>
         /// <returns>Objeto criado</returns>
         /// <response code="200">Sucesso</response>
@@ -44,9 +46,7 @@ namespace DevChurras.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post(
-            [FromServices] DataContext context,
-            [FromBody] Participante model)
+        public async Task<IActionResult> Post([FromServices] DataContext context, [FromBody] Participante model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -62,6 +62,7 @@ namespace DevChurras.API.Controllers
         /// <summary>
         /// Deleta um Participante
         /// </summary>
+        /// <param name="context">DataContext</param>
         /// <param name="id">ID do Participante</param>
         /// <response code="204">Sucesso</response>
         /// <response code="404">Participante não encontrado</response>
@@ -72,13 +73,17 @@ namespace DevChurras.API.Controllers
         {
             // Remove participante
             var participante = await context.Participantes.SingleOrDefaultAsync(p => p.Id == id);
-            if (participante == null) return NotFound("Participante não encontrado");
+
+            if (participante == null)
+                return NotFound("Participante não encontrado");
 
             context.Participantes.Remove(participante);
 
             // Remove convidado do participante
             var convidado = await context.Convidados.SingleOrDefaultAsync(c => c.ParticipanteId == id);
-            if (convidado != null) context.Convidados.Remove(convidado);
+
+            if (convidado != null)
+                context.Convidados.Remove(convidado);
 
             await context.SaveChangesAsync();
 

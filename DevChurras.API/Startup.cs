@@ -14,20 +14,26 @@ namespace DevChurras.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        public Startup(IConfiguration configuration) =>
+            Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // PARA ACESSO AO BANCO EM MEMÓRIA
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("dados"));
+
+            // Injeção de Dependência
+            // Tipos: Transient, Scoped, Singleton
             services.AddScoped<DataContext, DataContext>();
+
             services.AddControllers();
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(o =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                o.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "DevChurras.API",
                     Version = "v1",
@@ -42,7 +48,7 @@ namespace DevChurras.API
                 // Incluindo comentários XML ao Swagger
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                o.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -50,9 +56,7 @@ namespace DevChurras.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             app.UseHttpsRedirection();
 
@@ -65,13 +69,15 @@ namespace DevChurras.API
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
+            if (env.IsDevelopment())
             {
-                c.RoutePrefix = string.Empty;
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevChurras.API v1");
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI(o =>
+                {
+                    o.RoutePrefix = string.Empty;
+                    o.SwaggerEndpoint("/swagger/v1/swagger.json", "DevChurras.API v1");
+                });
+            }
         }
     }
 }

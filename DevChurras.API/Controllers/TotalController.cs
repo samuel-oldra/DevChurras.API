@@ -22,6 +22,7 @@ namespace DevChurras.API.Controllers
         ///     "valorGastoBebida": 60
         /// }
         /// </remarks>
+        /// <param name="context">DataContext</param>
         /// <param name="model">Dados dos Valores</param>
         /// <returns>Objeto criado</returns>
         /// <response code="200">Sucesso</response>
