@@ -13,9 +13,9 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 - ASP.NET Core com .NET Core 3.1
 - Entity Framework Core
 - In-Memory database
-- Swagger
-- Injeção de Dependência
+- Swagger (documentação)
 - Programação Orientada a Objetos
+- Injeção de Dependência
 - Padrão Repository
 - Clean Code
 - Publicação
@@ -35,8 +35,10 @@ Foi desenvolvida uma API REST para gerenciamento de um churrasco.
 ```
 dotnet new gitignore
 dotnet new webapi -o DevChurras.API
+
 dotnet build
 dotnet run
 dotnet watch run
+
 dotnet publish
 ```
