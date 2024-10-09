@@ -14,6 +14,11 @@ namespace DevChurras.API.Controllers
 
         private readonly IParticipanteRepository participanteRepository;
 
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="convidadoRepository"></param>
+        /// <param name="participanteRepository"></param>
         public ParticipanteController(
             IConvidadoRepository convidadoRepository,
             IParticipanteRepository participanteRepository)
